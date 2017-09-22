@@ -1,5 +1,4 @@
 import React from 'react';
-import request from 'superagent';
 import _ from 'lodash';
 
 import { metaStates as botMetaStates } from '../botFsmDefinitions';
@@ -27,11 +26,13 @@ export default class DisableMotors extends React.Component {
       gcode = 'M84 E';
     }
 
-    request.post(this.props.endpoint)
-    .send({ command: 'processGcode' })
-    .send({ gcode })
-    .set('Accept', 'application/json')
-    .end();
+    const commandObject = {
+      command: 'processGcode',
+      botId: this.props.endpoint,
+      gcode,
+    };
+
+    this.props.client.publish('/command', commandObject);
   }
 
   render() {
@@ -42,28 +43,42 @@ export default class DisableMotors extends React.Component {
         <h3>DISABLE MOTORS</h3>
         <div className="">
           <div className="col-xs-3 no-padding">
-            <HoverAndClick color={{ h: this.props.appColor, s: disableable ? 40 : 5, l: 40 }} >
-              <button disabled={!disableable} onClick={() => this.disableAxes({ x: true })}>X</button>
+            <HoverAndClick color={{ h: this.props.appColor, s: disableable ? 40 : 5, l: 40 }}>
+              <button disabled={!disableable} onClick={() => this.disableAxes({ x: true })}>
+                X
+              </button>
             </HoverAndClick>
           </div>
           <div className="col-xs-3 no-padding">
-            <HoverAndClick color={{ h: this.props.appColor, s: disableable ? 40 : 5, l: 40 }} >
-              <button disabled={!disableable} onClick={() => this.disableAxes({ y: true })}>Y</button>
+            <HoverAndClick color={{ h: this.props.appColor, s: disableable ? 40 : 5, l: 40 }}>
+              <button disabled={!disableable} onClick={() => this.disableAxes({ y: true })}>
+                Y
+              </button>
             </HoverAndClick>
           </div>
           <div className="col-xs-3 no-padding">
-            <HoverAndClick color={{ h: this.props.appColor, s: disableable ? 40 : 5, l: 40 }} >
-              <button disabled={!disableable} onClick={() => this.disableAxes({ z: true })}>Z</button>
+            <HoverAndClick color={{ h: this.props.appColor, s: disableable ? 40 : 5, l: 40 }}>
+              <button disabled={!disableable} onClick={() => this.disableAxes({ z: true })}>
+                Z
+              </button>
             </HoverAndClick>
           </div>
           <div className="col-xs-3 no-padding">
-            <HoverAndClick color={{ h: this.props.appColor, s: disableable ? 40 : 5, l: 40 }} >
-              <button disabled={!disableable} onClick={() => this.disableAxes({ e: true })}>E</button>
+            <HoverAndClick color={{ h: this.props.appColor, s: disableable ? 40 : 5, l: 40 }}>
+              <button disabled={!disableable} onClick={() => this.disableAxes({ e: true })}>
+                E
+              </button>
             </HoverAndClick>
           </div>
           <div className="col-sm-12 no-padding">
-            <HoverAndClick color={{ h: this.props.appColor, s: disableable ? 40 : 5, l: 40 }} >
-              <button disabled={!disableable} className="full-width" onClick={() => this.disableAxes({ x: true, y: true, z: true, e: true })}>All</button>
+            <HoverAndClick color={{ h: this.props.appColor, s: disableable ? 40 : 5, l: 40 }}>
+              <button
+                disabled={!disableable}
+                className="full-width"
+                onClick={() => this.disableAxes({ x: true, y: true, z: true, e: true })}
+              >
+                All
+              </button>
             </HoverAndClick>
           </div>
         </div>

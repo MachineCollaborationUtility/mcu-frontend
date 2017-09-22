@@ -238,19 +238,19 @@ export default class Bots extends React.Component {
     this.closeModal();
     event.preventDefault();
 
-    request
-      .post('/v1/bots')
-      .send({ name: event.target.name.value })
-      .send({ model: event.target.model.value })
-      .send({ endpoint: event.target.endpoint.value })
-      .send({ jogXSpeed: parseInt(event.target.jogXSpeed.value, 10) })
-      .send({ jogYSpeed: parseInt(event.target.jogYSpeed.value, 10) })
-      .send({ jogZSpeed: parseInt(event.target.jogZSpeed.value, 10) })
-      .send({ jogESpeed: parseInt(event.target.jogESpeed.value, 10) })
-      .send({ tempE: parseInt(event.target.tempE.value, 10) })
-      .send({ tempB: parseInt(event.target.tempB.value, 10) })
-      .set('Accept', 'application/json')
-      .end();
+    // request
+    //   .post('/v1/bots')
+    //   .send({ name: event.target.name.value })
+    //   .send({ model: event.target.model.value })
+    //   .send({ endpoint: event.target.endpoint.value })
+    //   .send({ jogXSpeed: parseInt(event.target.jogXSpeed.value, 10) })
+    //   .send({ jogYSpeed: parseInt(event.target.jogYSpeed.value, 10) })
+    //   .send({ jogZSpeed: parseInt(event.target.jogZSpeed.value, 10) })
+    //   .send({ jogESpeed: parseInt(event.target.jogESpeed.value, 10) })
+    //   .send({ tempE: parseInt(event.target.tempE.value, 10) })
+    //   .send({ tempB: parseInt(event.target.tempB.value, 10) })
+    //   .set('Accept', 'application/json')
+    //   .end();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -284,6 +284,7 @@ export default class Bots extends React.Component {
           currentJob={currentJob}
           botPresets={this.props.botPresets}
           bot={selectedBot}
+          client={this.props.client}
         />
       );
 

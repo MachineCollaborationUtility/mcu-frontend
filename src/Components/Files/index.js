@@ -1,7 +1,6 @@
 /* global document */
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
-import request from 'superagent';
 import _ from 'lodash';
 
 import File from './File';
@@ -51,7 +50,9 @@ export default class Files extends React.Component {
       // Then make sure the selected file is consumable by the bot
       if (bot.info.fileTypes.length > 0) {
         // Check if any of the supported files match the file we are about to process
-        const supportedFileList = bot.info.fileTypes.filter(filetype => this.state.fileName && this.state.fileName.indexOf(filetype) !== -1);
+        const supportedFileList = bot.info.fileTypes.filter(
+          filetype => this.state.fileName && this.state.fileName.indexOf(filetype) !== -1,
+        );
         // If there's no match, don't add the bot to the option list
         if (supportedFileList.length <= 0) {
           return;
@@ -82,23 +83,13 @@ export default class Files extends React.Component {
     // TODO, upload the file before requesting the job to start, if kicking off a remote job
 
     // // Create a job
-    const requestParams = {
+    const commandObject = {
       command: 'startJob',
       fileUuid: this.state.fileUuid,
+      botId: botUuid,
     };
 
-    //
-    request
-      .post(`/v1/bots/${botUuid}`)
-      .send(requestParams)
-      .set('Accept', 'application/json')
-      .end((err, reply) => {
-        // console.log('started job', botUuid, fileUuid);
-        console.log(err, reply);
-      })
-      .catch((err) => {
-        console.log('request error', err);
-      });
+    this.props.client.publish('/command', commandObject);
     this.close();
   }
 
@@ -125,9 +116,13 @@ export default class Files extends React.Component {
     const fileListArray = _.entries(this.props.files);
 
     // Sort the files so the most recently used is first
-    fileListArray.sort((a, b) => new Date(a[1].dateChanged).getTime() > new Date(b[1].dateChanged).getTime());
+    fileListArray.sort(
+      (a, b) => new Date(a[1].dateChanged).getTime() > new Date(b[1].dateChanged).getTime(),
+    );
 
-    const files = fileListArray.map(([fileKey, file]) => <File key={file.uuid} file={file} handleProcessFile={this.handleProcessFile} />);
+    const files = fileListArray.map(([fileKey, file]) => (
+      <File key={file.uuid} file={file} handleProcessFile={this.handleProcessFile} />
+    ));
 
     const modal = this.renderModal();
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import request from 'superagent';
 import _ from 'lodash';
 
 import { metaStates as botMetaStates } from '../botFsmDefinitions';
@@ -20,15 +19,18 @@ export default class HomeAxes extends React.Component {
 
   handleClick(event) {
     event.preventDefault();
-    request.post(this.props.endpoint)
-    .send({ command: 'jog' })
-    .send({ axis: this.props.axis })
-    .send({ amount: this.props.amount })
-    .set('Accept', 'application/json')
-    .end();
+
+    const commandObject = {
+      botId: this.props.endpoint,
+      command: 'jog',
+      axis: this.props.axis,
+      amount: this.props.amount,
+    };
+
+    this.props.client.publish('/command', commandObject);
 
     setTimeout(() => {
-      const hslRegex = /hsl\(\s*(\d+)\s*,\s*(\d*(?:\.\d+)?%)\s*,\s*(\d*(?:\.\d+)?%)\)/ig;
+      const hslRegex = /hsl\(\s*(\d+)\s*,\s*(\d*(?:\.\d+)?%)\s*,\s*(\d*(?:\.\d+)?%)\)/gi;
       const hsl = hslRegex.exec(this.props.fillColor);
       const borderColor = Object.assign({}, this.state.borderColor);
       borderColor.l = Number(hsl[3].split('%')[0]) - 10;
@@ -39,7 +41,6 @@ export default class HomeAxes extends React.Component {
     borderColor.l = 80;
     this.setState({ borderColor });
   }
-
 
   homeAxes(inputAxes) {
     const axes = { x: false, y: false, z: false };
@@ -61,13 +62,13 @@ export default class HomeAxes extends React.Component {
       gcode = 'G28 Z';
     }
 
-    request.post(this.props.endpoint)
-    .send({ command: 'processGcode' })
-    .send({ gcode })
-    .set('Accept', 'application/json')
-    .end((err, response) => {
-      // debugger;
-    });
+    const commandObject = {
+      command: 'processGcode',
+      gcode,
+      botId: this.props.endpoint,
+    };
+
+    this.props.client.publish('/command', commandObject);
   }
 
   render() {
@@ -78,29 +79,32 @@ export default class HomeAxes extends React.Component {
         <div className="row">
           <div className="area-padding home-area max-area-width">
             <div className="col-xs-3 no-padding">
-              <HoverAndClick color={{ h: this.props.appColor, s: homeable ? 40 : 5, l: 40 }} >
+              <HoverAndClick color={{ h: this.props.appColor, s: homeable ? 40 : 5, l: 40 }}>
                 <button disabled={!homeable} onClick={() => this.homeAxes({ x: true })}>
                   Home X
                 </button>
               </HoverAndClick>
             </div>
             <div className="col-xs-3 no-padding">
-              <HoverAndClick color={{ h: this.props.appColor, s: homeable ? 40 : 5, l: 40 }} >
+              <HoverAndClick color={{ h: this.props.appColor, s: homeable ? 40 : 5, l: 40 }}>
                 <button disabled={!homeable} onClick={() => this.homeAxes({ y: true })}>
                   Home Y
                 </button>
               </HoverAndClick>
             </div>
             <div className="col-xs-3 no-padding">
-              <HoverAndClick color={{ h: this.props.appColor, s: homeable ? 40 : 5, l: 40 }} >
+              <HoverAndClick color={{ h: this.props.appColor, s: homeable ? 40 : 5, l: 40 }}>
                 <button disabled={!homeable} onClick={() => this.homeAxes({ z: true })}>
                   Home Z
                 </button>
               </HoverAndClick>
             </div>
             <div className="col-xs-3 no-padding">
-              <HoverAndClick color={{ h: this.props.appColor, s: homeable ? 40 : 5, l: 40 }} >
-                <button disabled={!homeable} onClick={() => this.homeAxes({ x: true, y: true, z: true })}>
+              <HoverAndClick color={{ h: this.props.appColor, s: homeable ? 40 : 5, l: 40 }}>
+                <button
+                  disabled={!homeable}
+                  onClick={() => this.homeAxes({ x: true, y: true, z: true })}
+                >
                   Home All
                 </button>
               </HoverAndClick>

@@ -1,5 +1,4 @@
 import React from 'react';
-import request from 'superagent';
 
 import { metaStates as botMetaStates } from '../botFsmDefinitions';
 import HoverAndClick from './HoverAndClick';
@@ -15,11 +14,13 @@ export default class SendGcode extends React.Component {
     event.preventDefault();
     const gcode = event.target.gcode.value;
 
-    request.post(this.props.endpoint)
-    .send({ command: 'processGcode' })
-    .send({ gcode })
-    .set('Accept', 'application/json')
-    .end(() => {
+    const commandObject = {
+      command: 'processGcode',
+      gcode,
+      botId: this.props.endpoint,
+    };
+
+    this.props.client.publish('/command', commandObject).then(() => {
       this.gcodeInput.value = '';
     });
   }
@@ -32,12 +33,24 @@ export default class SendGcode extends React.Component {
         <form onSubmit={this.processGcode}>
           <div className="row">
             <div className="col-sm-7 no-padding-right">
-              <input disabled={!gcodeable} ref={(gcodeInput) => { this.gcodeInput = gcodeInput; }} placeholder="type gcode here" type="text" name="gcode" />
+              <input
+                disabled={!gcodeable}
+                ref={(gcodeInput) => {
+                  this.gcodeInput = gcodeInput;
+                }}
+                placeholder="type gcode here"
+                type="text"
+                name="gcode"
+              />
             </div>
             <div className="col-sm-5">
-               <HoverAndClick allowDefault disabled={!gcodeable} color={{ h: this.props.appColor, s: gcodeable ? 40 : 5, l: 40 }} >
+              <HoverAndClick
+                allowDefault
+                disabled={!gcodeable}
+                color={{ h: this.props.appColor, s: gcodeable ? 40 : 5, l: 40 }}
+              >
                 <input disabled={!gcodeable} type="submit" value="SEND GCODE" />
-               </HoverAndClick>
+              </HoverAndClick>
             </div>
           </div>
         </form>

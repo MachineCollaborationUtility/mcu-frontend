@@ -1,5 +1,4 @@
 import React from 'react';
-import request from 'superagent';
 import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 
 import JogPanel from './JogPanel';
@@ -21,60 +20,104 @@ export default class Dashboard extends React.Component {
     const isConductorBot = this.props.bot.settings.model.toLowerCase().includes('conductor');
     let conductorPlayers = '';
     if (isConductorBot) {
-      conductorPlayers =
+      conductorPlayers = (
         <div className="container">
           <div className="area row">
-            <ConductorPlayers endpoint={this.props.endpoint} bot={this.props.bot}/>
+            <ConductorPlayers
+              client={this.props.client}
+              endpoint={this.props.endpoint}
+              bot={this.props.bot}
+            />
           </div>
         </div>
-        ;
+      );
     }
 
     return (
       <div id="dashboard">
-        { isConductorBot ?
+        {isConductorBot ? (
           <div className="container">
-            <CurrentJob endpoint={this.props.endpoint} bot={this.props.bot}/>
+            <CurrentJob
+              client={this.props.client}
+              endpoint={this.props.endpoint}
+              bot={this.props.bot}
+            />
           </div>
-          :
+        ) : (
           <div className="container no-padding-mobile">
             <div id="left" className="col-md-6">
               <div className="area">
-                <JogPanel appColor={this.props.appColor} endpoint={this.props.endpoint} bot={this.props.bot} />
+                <JogPanel
+                  appColor={this.props.appColor}
+                  client={this.props.client}
+                  endpoint={this.props.endpoint}
+                  bot={this.props.bot}
+                />
               </div>
               <div className="area">
-                <HomeAxes appColor={this.props.appColor} endpoint={this.props.endpoint} bot={this.props.bot}/>
+                <HomeAxes
+                  appColor={this.props.appColor}
+                  client={this.props.client}
+                  endpoint={this.props.endpoint}
+                  bot={this.props.bot}
+                />
               </div>
               <div className="area">
-                <SendGcode appColor={this.props.appColor} endpoint={this.props.endpoint} bot={this.props.bot}/>
+                <SendGcode
+                  appColor={this.props.appColor}
+                  client={this.props.client}
+                  endpoint={this.props.endpoint}
+                  bot={this.props.bot}
+                />
               </div>
             </div>
             <div id="right" className="col-md-6">
               <div className="area">
-                <CurrentJob appColor={this.props.appColor} files={this.props.files} endpoint={this.props.endpoint} bot={this.props.bot}/>
+                <CurrentJob
+                  appColor={this.props.appColor}
+                  files={this.props.files}
+                  client={this.props.client}
+                  endpoint={this.props.endpoint}
+                  bot={this.props.bot}
+                />
               </div>
               <div className="area row">
-                <div className="col-sm-7" style={{padding: '2px'}}>
-                  <PositionFeedback appColor={this.props.appColor} endpoint={this.props.endpoint} bot={this.props.bot}/>
+                <div className="col-sm-7" style={{ padding: '2px' }}>
+                  <PositionFeedback
+                    appColor={this.props.appColor}
+                    client={this.props.client}
+                    endpoint={this.props.endpoint}
+                    bot={this.props.bot}
+                  />
                 </div>
-                <div className="col-sm-5" style={{padding: '5px'}}>
-                  <DisableMotors appColor={this.props.appColor} endpoint={this.props.endpoint} bot={this.props.bot} />
+                <div className="col-sm-5" style={{ padding: '5px' }}>
+                  <DisableMotors
+                    appColor={this.props.appColor}
+                    client={this.props.client}
+                    endpoint={this.props.endpoint}
+                    bot={this.props.bot}
+                  />
                 </div>
               </div>
               <div className="area">
-                <Temp appColor={this.props.appColor} endpoint={this.props.endpoint} bot={this.props.bot}/>
+                <Temp
+                  appColor={this.props.appColor}
+                  client={this.props.client}
+                  endpoint={this.props.endpoint}
+                  bot={this.props.bot}
+                />
               </div>
             </div>
-            {
-              this.props.bot.warnings.length > 0 ?
+            {this.props.bot.warnings.length > 0 ? (
               <div className="col-md-12">
                 <Warnings bot={this.props.bot} />
               </div>
-              : ''
-            }
+            ) : (
+              ''
+            )}
           </div>
-        }
-        { isConductorBot ? conductorPlayers : '' }
+        )}
+        {isConductorBot ? conductorPlayers : ''}
       </div>
     );
   }

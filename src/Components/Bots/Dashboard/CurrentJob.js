@@ -1,10 +1,7 @@
 import React from 'react';
-import request from 'superagent';
 import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 
 import HoverAndClick from './HoverAndClick';
-import File from '../../Files/File';
-
 import { metaStates as botMetaStates } from '../botFsmDefinitions';
 
 export default class CurrentJob extends React.Component {
@@ -16,21 +13,23 @@ export default class CurrentJob extends React.Component {
   }
 
   sendCommand(command) {
-    request
-      .post(this.props.endpoint)
-      .send({ command })
-      .set('Accept', 'application/json')
-      .end();
+    const commandObject = {
+      command,
+      botId: this.props.endpoint,
+    };
+    this.props.client.publish('/command', commandObject);
   }
 
   cancelJob() {
-    // const reply = confirm('Are you sure you want to cancel the job?');
-    // if (reply) {
-    //   request.post(this.props.endpoint)
-    //   .send({ command: 'cancel' })
-    //   .set('Accept', 'application/json')
-    //   .end();
-    // }
+    // eslint-disable-next-line no-restricted-globals
+    const reply = confirm('Are you sure you want to cancel the job?');
+    if (reply) {
+      const commandObject = {
+        command: 'cancel',
+        botId: this.props.endpoint,
+      };
+      this.props.client.publish('/command', commandObject);
+    }
   }
 
   renderConnectButton() {
@@ -203,19 +202,12 @@ export default class CurrentJob extends React.Component {
   }
 
   printFile(fileUuid) {
-    const requestParams = {
+    const commandObject = {
       command: 'startJob',
       fileUuid,
+      botId: this.props.endpoint,
     };
-
-    request
-      .post(`/v1/bots/${this.props.bot.settings.uuid}`)
-      .send(requestParams)
-      .set('Accept', 'application/json')
-      .end()
-      .catch((err) => {
-        // console.log('request error', err);
-      });
+    this.props.client.publish('/command', commandObject);
   }
 
   renderProgressBar() {

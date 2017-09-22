@@ -1,5 +1,4 @@
 import React from 'react';
-import request from 'superagent';
 
 export default class Terminal extends React.Component {
   constructor(props) {
@@ -7,10 +6,6 @@ export default class Terminal extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        Terminal
-      </div>
-    );
+    return <div>Terminal</div>;
   }
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import request from 'superagent';
 import _ from 'underscore';
 
 export default class HoverAndClick extends React.Component {
@@ -65,28 +64,28 @@ export default class HoverAndClick extends React.Component {
   render() {
     return (
       <div>
-      {React.Children.map(this.props.children, child => {
-        const extraProps = {
-          style: {
-            padding: '3px',
-            backgroundColor: this.hslToString(this.state.color),
-            border: `3px solid ${this.hslToString(this.state.borderColor)}`,
-            transition: `${this.fadeTime}ms`,
-            transitionTimingFunction: 'ease',
-          },
-          onMouseOut: this.leaveHover,
-          onMouseOver: this.startHover,
-          onClick: (e) => {
-            this.setState({ color: this.props.color });
-            this.handleClick(e);
-            if (typeof child.props.onClick === 'function') {
-              child.props.onClick();
-            }
-          },
-        };
+        {React.Children.map(this.props.children, (child) => {
+          const extraProps = {
+            style: {
+              padding: '3px',
+              backgroundColor: this.hslToString(this.state.color),
+              border: `3px solid ${this.hslToString(this.state.borderColor)}`,
+              transition: `${this.fadeTime}ms`,
+              transitionTimingFunction: 'ease',
+            },
+            onMouseOut: this.leaveHover,
+            onMouseOver: this.startHover,
+            onClick: (e) => {
+              this.setState({ color: this.props.color });
+              this.handleClick(e);
+              if (typeof child.props.onClick === 'function') {
+                child.props.onClick();
+              }
+            },
+          };
 
-        return React.cloneElement(child, extraProps);
-      })}
+          return React.cloneElement(child, extraProps);
+        })}
       </div>
     );
   }
