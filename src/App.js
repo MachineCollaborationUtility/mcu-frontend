@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Faye from 'faye';
+
 import './main.css';
+
+import Routes from './Routes';
 
 class App extends Component {
   constructor(props) {
@@ -23,11 +26,7 @@ class App extends Component {
     });
   }
   render() {
-    return (
-      <div className="App">
-        <h1>MCU</h1>
-      </div>
-    );
+    return <Routes {...this.state} />;
   }
 }
 
