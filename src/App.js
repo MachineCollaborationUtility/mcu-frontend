@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import Faye from 'faye';
 
 import './main.css';
 
+import Header from './Components/Header';
 import Routes from './Routes';
 
 class App extends Component {
@@ -11,12 +13,17 @@ class App extends Component {
     this.state = {
       client: new Faye.Client('http://localhost:3000/faye'),
       bots: {},
+      botPresets: {},
       jobs: {},
       files: {},
+      appColor: 210,
     };
 
     this.state.client.subscribe('/bots', ({ bots }) => {
       this.setState({ bots });
+    });
+    this.state.client.subscribe('/botPresets', ({ botPresets }) => {
+      this.setState({ botPresets });
     });
     this.state.client.subscribe('/jobs', ({ jobs }) => {
       this.setState({ jobs });
@@ -26,7 +33,17 @@ class App extends Component {
     });
   }
   render() {
-    return <Routes {...this.state} />;
+    const Router = BrowserRouter;
+    return (
+      <div>
+        <Router>
+          <div>
+            <Header {...this.state} />
+            <Routes {...this.state} />
+          </div>
+        </Router>
+      </div>
+    );
   }
 }
 

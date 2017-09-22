@@ -1,23 +1,23 @@
 import React from 'react';
-import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { Route, Switch } from 'react-router-dom';
 
 // import App from './App';
 // import Files from './modules/Files';
 // import Settings from './modules/Settings';
 // import Jobs from './modules/Jobs';
 // import Bots from './modules/Bots';
-import Bots from '../Bots';
+import Bots from '../Components/Bots';
+import Files from '../Components/Files';
+import Settings from '../Components/Settings';
 
 const Routes = (props) => {
-  const Router = BrowserRouter;
   const routes = (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={Bots} {...props} />
-        <Route path="/:id" component={Bots} {...props} />
-      </Switch>
-    </Router>
+    <Switch>
+      <Route exact path="/" render={() => <Bots {...props} />} />
+      <Route path="/files" render={() => <Files {...props} />} />
+      <Route exact path="/settings" render={() => <Settings {...props} />} />
+      <Route path="/:id" render={routeProps => <Bots {...props} {...routeProps} />} />
+    </Switch>
   );
 
   // routes.propTypes = {
