@@ -16,14 +16,14 @@ export default class Jobs extends React.Component {
   }
 
   render() {
-    const jobs = _.entries(this.state.jobs).map(([jobKey, job]) => {
-      return <Job key={job.uuid} job={job}/>;
-    });
-    return (<div className="container">
-      <div id="jobs">
-        <h1>Jobs</h1>
-        {jobs}
+    const jobs = _.entries(this.state.jobs).map(([jobKey, job]) => <Job key={job.uuid} job={job} />);
+    return (
+      <div className="container">
+        <div id="jobs">
+          <h1>Jobs</h1>
+          {jobs}
+        </div>
       </div>
-    </div>);
+    );
   }
 }

@@ -25,7 +25,14 @@ export default class ConductorPlayers extends React.Component {
         <div className="col-md-4">Name: {player.name}</div>
         <div className="col-md-4">Endpoint: {player.endpoint}</div>
         <div className="col-md-4">
-          <button className="cancel" onClick={() => { this.removePlayer(player.name); }}>X</button>
+          <button
+            className="cancel"
+            onClick={() => {
+              this.removePlayer(player.name);
+            }}
+          >
+            X
+          </button>
         </div>
       </div>
     );
@@ -33,20 +40,22 @@ export default class ConductorPlayers extends React.Component {
 
   addPlayer(event) {
     event.preventDefault();
-    request.post(this.props.endpoint)
-    .send({ command: 'addPlayer' })
-    .send({ name: event.target.name.value })
-    .send({ endpoint: event.target.endpoint.value })
-    .set('Accept', 'application/json')
-    .end();
+    request
+      .post(this.props.endpoint)
+      .send({ command: 'addPlayer' })
+      .send({ name: event.target.name.value })
+      .send({ endpoint: event.target.endpoint.value })
+      .set('Accept', 'application/json')
+      .end();
   }
 
   removePlayer(name) {
-    request.post(this.props.endpoint)
-    .send({ command: 'removePlayer' })
-    .send({ name })
-    .set('Accept', 'application/json')
-    .end();
+    request
+      .post(this.props.endpoint)
+      .send({ command: 'removePlayer' })
+      .send({ name })
+      .set('Accept', 'application/json')
+      .end();
   }
 
   createNewPlayerForm() {
@@ -59,7 +68,12 @@ export default class ConductorPlayers extends React.Component {
           </div>
           <div className="col-md-4">
             <label htmlFor="endpoint">Player Endpoint:</label>
-            <input className="conductor-form-text" type="textarea" name="endpoint" defaultValue="" />
+            <input
+              className="conductor-form-text"
+              type="textarea"
+              name="endpoint"
+              defaultValue=""
+            />
           </div>
           <div className="col-md-4">
             <input className="green-plz" type="submit" value="Add Player" />

@@ -6,7 +6,9 @@ export default class Warnings extends React.Component {
   }
 
   render() {
-    const warnings = this.props.bot.warnings.map(warning => <div key={warning.time}>{warning.type}</div>);
+    const warnings = this.props.bot.warnings.map(warning => (
+      <div key={warning.time}>{warning.type}</div>
+    ));
 
     return (
       <div>
