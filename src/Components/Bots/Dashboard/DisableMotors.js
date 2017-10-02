@@ -26,13 +26,13 @@ export default class DisableMotors extends React.Component {
       gcode = 'M84 E';
     }
 
-    const commandObject = {
-      command: 'processGcode',
-      botId: this.props.endpoint,
-      gcode,
-    };
-
-    this.props.client.publish('/command', commandObject);
+    fetch(`/v1/bots/${this.props.endpoint}`, {
+      method: 'POST',
+      body: {
+        command: 'processGcode',
+        gcode,
+      },
+    });
   }
 
   render() {

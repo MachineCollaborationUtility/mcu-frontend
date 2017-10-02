@@ -20,14 +20,14 @@ export default class HomeAxes extends React.Component {
   handleClick(event) {
     event.preventDefault();
 
-    const commandObject = {
-      botId: this.props.endpoint,
-      command: 'jog',
-      axis: this.props.axis,
-      amount: this.props.amount,
-    };
-
-    this.props.client.publish('/command', commandObject);
+    fetch(`/v1/bots/${this.props.endpoint}`, {
+      method: 'POST',
+      body: {
+        command: 'jog',
+        axis: this.props.axis,
+        amount: this.props.amount,
+      },
+    });
 
     setTimeout(() => {
       const hslRegex = /hsl\(\s*(\d+)\s*,\s*(\d*(?:\.\d+)?%)\s*,\s*(\d*(?:\.\d+)?%)\)/gi;
@@ -62,13 +62,13 @@ export default class HomeAxes extends React.Component {
       gcode = 'G28 Z';
     }
 
-    const commandObject = {
-      command: 'processGcode',
-      gcode,
-      botId: this.props.endpoint,
-    };
-
-    this.props.client.publish('/command', commandObject);
+    fetch(`/v1/bots/${this.props.endpoint}`, {
+      method: 'POST',
+      body: {
+        command: 'processGcode',
+        gcode,
+      },
+    });
   }
 
   render() {

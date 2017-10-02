@@ -13,22 +13,24 @@ export default class CurrentJob extends React.Component {
   }
 
   sendCommand(command) {
-    const commandObject = {
-      command,
-      botId: this.props.endpoint,
-    };
-    this.props.client.publish('/command', commandObject);
+    fetch(`/v1/bots/${this.props.endpoint}`, {
+      method: 'POST',
+      body: {
+        command,
+      },
+    });
   }
 
   cancelJob() {
     // eslint-disable-next-line no-restricted-globals
     const reply = confirm('Are you sure you want to cancel the job?');
     if (reply) {
-      const commandObject = {
-        command: 'cancel',
-        botId: this.props.endpoint,
-      };
-      this.props.client.publish('/command', commandObject);
+      fetch(`/v1/bots/${this.props.endpoint}`, {
+        method: 'POST',
+        body: {
+          command: 'cancel',
+        },
+      });
     }
   }
 
@@ -202,12 +204,13 @@ export default class CurrentJob extends React.Component {
   }
 
   printFile(fileUuid) {
-    const commandObject = {
-      command: 'startJob',
-      fileUuid,
-      botId: this.props.endpoint,
-    };
-    this.props.client.publish('/command', commandObject);
+    fetch(`/v1/bots/${this.props.endpoint}`, {
+      method: 'POST',
+      body: {
+        command: 'startJob',
+        fileUuid,
+      },
+    });
   }
 
   renderProgressBar() {

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "bluebird": "^3.5.0",
     "faye": "^1.2.4",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
@@ -15,6 +16,7 @@
     "react-router-dom": "^4.1.2",
     "react-router-prop-types": "^0.0.1",
     "react-scripts": "1.0.13",
+    "socket.io-client": "^2.0.3",
     "superagent": "^3.6.0",
     "underscore": "^1.8.3"
   },
@@ -42,5 +44,11 @@
     "test": "react-scripts test --env=jsdom",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
+  },
+  "proxy": {
+    "/*": {
+      "target": "http://localhost:9000/",
+      "secure": "false"
+    }
   }
 }

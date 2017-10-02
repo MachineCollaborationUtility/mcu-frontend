@@ -83,13 +83,15 @@ export default class Files extends React.Component {
     // TODO, upload the file before requesting the job to start, if kicking off a remote job
 
     // // Create a job
-    const commandObject = {
-      command: 'startJob',
-      fileUuid: this.state.fileUuid,
-      botId: botUuid,
-    };
+    fetch(`/v1/bots/${this.props.endpoint}`, {
+      method: 'POST',
+      body: {
+        command: 'startJob',
+        fileUuid: this.state.fileUuid,
+        botId: botUuid,
+      },
+    });
 
-    this.props.client.publish('/command', commandObject);
     this.close();
   }
 
