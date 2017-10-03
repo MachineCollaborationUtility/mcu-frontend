@@ -23,13 +23,13 @@ export default class PositionFeedback extends React.Component {
       gcode = 'G92 Z0';
     }
 
-    fetch(`/v1/bots/${this.props.endpoint}`, {
-      method: 'POST',
-      body: {
-        command: 'processGcode',
-        gcode,
-      },
-    });
+    const commandObject = {
+      botUuid: this.props.endpoint,
+      command: 'processGcode',
+      gcode,
+    };
+
+    this.props.client.emit('command', commandObject);
   }
 
   // Round the number. If no number, return a '-'

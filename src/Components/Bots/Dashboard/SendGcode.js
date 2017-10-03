@@ -12,17 +12,17 @@ export default class SendGcode extends React.Component {
 
   processGcode(event) {
     event.preventDefault();
-    const gcode = event.target.gcode.value;
+    const gcode = String(event.target.gcode.value);
 
-    fetch(`/v1/bots/${this.props.endpoint}`, {
-      method: 'POST',
-      body: {
-        command: 'processGcode',
-        gcode,
-      },
-    }).then(() => {
-      this.gcodeInput.value = '';
-    });
+    const commandObject = {
+      botUuid: this.props.endpoint,
+      command: 'processGcode',
+      gcode,
+    };
+
+    this.props.client.emit('command', commandObject);
+
+    this.gcodeInput.value = '';
   }
 
   render() {

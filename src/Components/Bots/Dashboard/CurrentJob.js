@@ -1,5 +1,6 @@
 import React from 'react';
 import ProgressBar from 'react-bootstrap/lib/ProgressBar';
+import request from 'request-promise';
 
 import HoverAndClick from './HoverAndClick';
 import { metaStates as botMetaStates } from '../botFsmDefinitions';
@@ -13,24 +14,23 @@ export default class CurrentJob extends React.Component {
   }
 
   sendCommand(command) {
-    fetch(`/v1/bots/${this.props.endpoint}`, {
-      method: 'POST',
-      body: {
-        command,
-      },
-    });
+    const commandObject = {
+      botUuid: this.props.endpoint,
+      command,
+    };
+
+    this.props.client.emit('command', commandObject);
   }
 
   cancelJob() {
     // eslint-disable-next-line no-restricted-globals
     const reply = confirm('Are you sure you want to cancel the job?');
     if (reply) {
-      fetch(`/v1/bots/${this.props.endpoint}`, {
-        method: 'POST',
-        body: {
-          command: 'cancel',
-        },
-      });
+      const commandObject = {
+        botUuid: this.props.endpoint,
+        command: 'cancel',
+      };
+      this.props.client.emit('command', commandObject);
     }
   }
 
@@ -52,6 +52,7 @@ export default class CurrentJob extends React.Component {
         </HoverAndClick>
       );
     }
+
     if (this.props.bot.state === 'connecting') {
       return (
         <HoverAndClick color={{ h: 120, s: 20, l: 40 }}>
@@ -61,6 +62,7 @@ export default class CurrentJob extends React.Component {
         </HoverAndClick>
       );
     }
+
     if (this.props.bot.state === 'disconnecting') {
       return (
         <HoverAndClick color={{ h: 0, s: 20, l: 40 }}>
@@ -70,6 +72,7 @@ export default class CurrentJob extends React.Component {
         </HoverAndClick>
       );
     }
+
     if (botMetaStates.connected.includes(this.props.bot.state)) {
       return (
         <HoverAndClick color={{ h: 0, s: 40, l: 40 }}>
@@ -204,13 +207,13 @@ export default class CurrentJob extends React.Component {
   }
 
   printFile(fileUuid) {
-    fetch(`/v1/bots/${this.props.endpoint}`, {
-      method: 'POST',
-      body: {
-        command: 'startJob',
-        fileUuid,
-      },
-    });
+    const commandObject = {
+      botUuid: this.props.endpoint,
+      command: 'startJob',
+      fileUuid,
+    };
+
+    this.props.client.emit('command', commandObject);
   }
 
   renderProgressBar() {

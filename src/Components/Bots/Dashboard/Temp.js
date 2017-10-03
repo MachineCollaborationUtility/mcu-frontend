@@ -19,15 +19,14 @@ export default class Temp extends React.Component {
 
     // Don't update the temp unless the value passed is a number 0 or greater
     if (!Number.isNaN(temp) && temp >= 0) {
-      fetch(`/v1/bots/${this.props.endpoint}`, {
-        method: 'POST',
-        body: {
-          command: 'processGcode',
-          gcode: `M104 S${event.target.setpoint.value}`,
-        },
-      }).then(() => {
-        this.nozzleTempInput.value = '';
-      });
+      const commandObject = {
+        botUuid: this.props.endpoint,
+        command: 'processGcode',
+        gcode: `M104 S${event.target.setpoint.value}`,
+      };
+      this.nozzleTempInput.value = '';
+
+      this.props.client.emit('command', commandObject);
     }
   }
 
@@ -38,26 +37,26 @@ export default class Temp extends React.Component {
 
     // Don't update the temp unless the value passed is a number 0 or greater
     if (!Number.isNaN(temp) && temp >= 0) {
-      fetch(`/v1/bots/${this.props.endpoint}`, {
-        method: 'POST',
-        body: {
-          command: 'processGcode',
-          gcode: `M140 S${event.target.setpoint.value}`,
-        },
-      }).then(() => {
-        this.bedTempInput.value = '';
-      });
+      const commandObject = {
+        botUuid: this.props.endpoint,
+        command: 'processGcode',
+        gcode: `M140 S${event.target.setpoint.value}`,
+      };
+
+      this.bedTempInput.value = '';
+
+      this.props.client.emit('command', commandObject);
     }
   }
 
   processGcode(gcode) {
-    fetch(`/v1/bots/${this.props.endpoint}`, {
-      method: 'POST',
-      body: {
-        command: 'processGcode',
-        gcode,
-      },
-    });
+    const commandObject = {
+      botUuid: this.props.endpoint,
+      command: 'processGcode',
+      gcode,
+    };
+
+    this.props.client.emit('command', commandObject);
   }
 
   renderNozzleOnOff() {

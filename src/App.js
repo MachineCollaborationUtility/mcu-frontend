@@ -38,6 +38,7 @@ class App extends Component {
           break;
       }
     });
+
     this.state.client.on('fileEvent', (file) => {
       const newFiles = this.state.files;
       switch (file.event) {
@@ -53,6 +54,7 @@ class App extends Component {
           break;
       }
     });
+
     this.state.client.on('jobEvent', (job) => {
       const newJobs = this.state.jobs;
       const newBots = this.state.bots;

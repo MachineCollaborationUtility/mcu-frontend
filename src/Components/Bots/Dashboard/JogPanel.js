@@ -36,14 +36,14 @@ class Polygon extends React.Component {
   handleClick(event) {
     event.preventDefault();
 
-    fetch(`/v1/bots/${this.props.endpoint}`, {
-      method: 'POST',
-      body: {
-        command: 'jog',
-        amount: this.props.amount,
-        axis: this.props.axis,
-      },
-    });
+    const commandObject = {
+      botUuid: this.props.endpoint,
+      command: 'jog',
+      amount: this.props.amount,
+      axis: this.props.axis,
+    };
+
+    this.props.client.emit('command', commandObject);
     // On mobile, should reset color after click
     // this.setState({ color: this.buttonColor });
 
